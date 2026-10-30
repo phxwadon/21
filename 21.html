@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ภารกิจขอเป็นแฟน 21 วัน 💖</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Mali & Prompt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'love-pink': '#FF8FA3',
+                        'love-soft': '#FFF0F5',
+                        'love-deep': '#FF4D6D',
+                        'love-peach': '#FFB3C6',
+                        'love-warm': '#FFF5F6'
+                    },
+                    fontFamily: {
+                        mali: ['Mali', 'cursive'],
+                        prompt: ['Prompt', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-10px) rotate(3deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 50%, #ffd1dc 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-mali {
+            font-family: 'Mali', cursive;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 182, 193, 0.5);
+        }
+
+        /* Floating Hearts Animation Background */
+        .bg-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart-particle {
+            position: absolute;
+            list-style: none;
+            opacity: 0;
+            animation: animateHearts 15s linear infinite;
+            bottom: -150px;
+        }
+
+        @keyframes animateHearts {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-120vh) rotate(720deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff0f5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffb3c6;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff8fa3;
+        }
+
+        .card-glow-day21 {
+            box-shadow: 0 0 25px rgba(255, 77, 109, 0.6), 0 0 10px rgba(255, 215, 0, 0.8);
+            border: 3px solid #ff4d6d;
+        }
+    </style>
+</head>
+<body class="text-gray-700 relative pb-16">
+
+    <!-- Floating Background Particles -->
+    <ul class="bg-hearts" id="hearts-bg"></ul>
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-30 backdrop-blur-md bg-white/70 border-b border-pink-200 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl animate-bounce">💖</span>
+                <h1 class="font-mali text-lg sm:text-xl font-bold text-love-deep tracking-wide">
+                    ภารกิจขอเป็นแฟน 21 วัน
+                </h1>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <!-- Music Toggle Button -->
+                <button id="music-btn" onclick="toggleMusic()" class="p-2 rounded-full bg-pink-100 hover:bg-pink-200 text-love-deep transition-all duration-300 shadow-sm" title="เปิด/ปิด เพลงน่ารักๆ">
+                    <i id="music-icon" class="fas fa-music"></i>
+                </button>
+                
+                <!-- Admin Mode Toggle Button -->
+                <button onclick="toggleAdminModal()" class="px-3 py-1.5 rounded-full bg-love-pink text-white text-xs sm:text-sm font-medium hover:bg-love-deep transition-all duration-300 shadow-md flex items-center gap-1.5">
+                    <i class="fas fa-cog"></i>
+                    <span>จัดการภารกิจ</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-4xl mx-auto px-4 pt-6 relative z-10">
+
+        <!-- Banner & Progress Card -->
+        <section class="glass-card rounded-3xl p-6 mb-8 text-center shadow-xl relative overflow-hidden">
+            <div class="absolute -right-8 -top-8 w-24 h-24 bg-pink-200/50 rounded-full blur-xl pointer-events-none"></div>
+            <div class="absolute -left-8 -bottom-8 w-24 h-24 bg-red-200/50 rounded-full blur-xl pointer-events-none"></div>
+
+            <span class="inline-block px-3 py-1 bg-pink-100 text-love-deep rounded-full text-xs font-semibold mb-3">
+                🌸 21 Days Love Mission Challenge 🌸
+            </span>
+
+            <h2 class="font-mali text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+                ความในใจวันละนิด... จนครบ 21 วัน ✨
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-600 max-w-lg mx-auto mb-5 leading-relaxed">
+                เค้าตั้งใจทำเว็บนี้ขึ้นมาเพื่อบอกความรู้สึกกับเธอทีละวันนะค้าง~ <br class="hidden sm:block">
+                ค่อยๆ เปิดอ่านวันละตอน แล้วมาดูกันว่าวันที่ 21 จะเกิดอะไรขึ้น! 🤫❤️
+            </p>
+
+            <!-- Progress Bar -->
+            <div class="max-w-md mx-auto bg-gray-100 rounded-full p-1.5 border border-pink-200 shadow-inner">
+                <div class="flex justify-between text-xs text-love-deep font-semibold mb-1 px-2">
+                    <span>ความก้าวหน้าภารกิจ</span>
+                    <span id="progress-text">0 / 21 วัน</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                    <div id="progress-bar" class="bg-gradient-to-r from-pink-400 to-love-deep h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grid of Days (1-21) -->
+        <section class="mb-12">
+            <div class="flex justify-between items-center mb-4 px-1">
+                <h3 class="font-mali text-lg sm:text-xl font-bold text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-calendar-heart text-love-deep"></i> การ์ดความทรงจำแต่ละวัน
+                </h3>
+                <span class="text-xs text-gray-500">แตะที่การ์ดเพื่อเปิดอ่าน 💌</span>
+            </div>
+
+            <!-- Days Grid -->
+            <div id="days-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+                <!-- Dynamically generated via JS -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-gray-500 py-4 font-mali">
+            สร้างขึ้นด้วยความรักเต็มหัวใจ 💖 สำหรับเธอคนเดียวเท่านั้น
+        </footer>
+    </main>
+
+    <!-- Modal 1: Day Content Modal -->
+    <div id="day-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 relative transform scale-95 transition-transform duration-300 bg-white/95 shadow-2xl border-2 border-pink-300 max-h-[90vh] overflow-y-auto">
+            
+            <!-- Close Button -->
+            <button onclick="closeDayModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-pink-100 text-love-deep hover:bg-love-deep hover:text-white flex items-center justify-center transition-all duration-200">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Day Header Badge -->
+            <div class="text-center mb-4">
+                <span id="modal-day-badge" class="px-4 py-1.5 bg-gradient-to-r from-pink-400 to-love-deep text-white font-mali text-xs sm:text-sm font-bold rounded-full shadow-md inline-block">
+                    DAY 01
+                </span>
+            </div>
+
+            <!-- Sticker / Emoji Icon Display -->
+            <div class="text-center mb-3">
+                <div id="modal-emoji" class="text-5xl sm:text-6xl animate-float inline-block">
+                    🌸
+                </div>
+            </div>
+
+            <!-- Optional Custom Image -->
+            <div id="modal-image-container" class="hidden mb-4 rounded-2xl overflow-hidden shadow-md max-h-56">
+                <img id="modal-image" src="" alt="Day memory" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Day Title -->
+            <h3 id="modal-title" class="font-mali text-xl sm:text-2xl font-bold text-center text-gray-800 mb-3">
+                หัวข้อประจำวัน
+            </h3>
+
+            <!-- Day Message Content -->
+            <div class="bg-love-soft/70 p-4 rounded-2xl border border-pink-100 mb-6">
+                <p id="modal-message" class="text-sm sm:text-base text-gray-700 whitespace-pre-line leading-relaxed text-center font-mali">
+                    ข้อความน่ารักๆ...
+                </p>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="text-center">
+                <button onclick="closeDayModal()" class="px-6 py-2.5 bg-gradient-to-r from-pink-400 to-love-deep text-white font-mali rounded-full shadow-lg hover:shadow-pink-300/50 hover:scale-105 active:scale-95 transition-all text-sm font-semibold">
+                    อ่านเสร็จแล้ว คิดถึงเธอจัง 💕
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Day 21 Proposal Grand Finale Modal -->
+    <div id="proposal-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md hidden opacity-0 transition-opacity duration-500">
+        <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 relative transform scale-90 transition-all duration-500 bg-white/95 shadow-2xl border-4 border-love-deep text-center overflow-hidden">
+            
+            <!-- Floating Crown Decor -->
+            <div class="text-5xl mb-2 animate-bounce">👑</div>
+            <span class="px-4 py-1 bg-gradient-to-r from-yellow-400 to-pink-500 text-white font-mali text-xs font-bold rounded-full shadow-md inline-block mb-3">
+                ✨ ภารกิจวันสุดท้าย Day 21 ✨
+            </span>
+
+            <h2 class="font-mali text-2xl sm:text-3xl font-bold text-love-deep mb-3">
+                ครบ 21 วันแล้วน้า... ❤️
+            </h2>
+
+            <!-- Special Message Container -->
+            <div class="bg-pink-50 p-4 rounded-2xl border border-pink-200 mb-6 max-h-48 overflow-y-auto">
+                <p id="proposal-message-text" class="text-sm sm:text-base text-gray-800 font-mali leading-relaxed whitespace-pre-line">
+                    ตลอด 21 วันที่ผ่านมา เค้าได้บอกความในใจไปครบหมดแล้ว... <br>
+                    วันนี้เลยอยากจะถามคำถามสำคัญที่สุดในชีวิต 💍
+                </p>
+            </div>
+
+            <!-- Final Question Banner -->
+            <div class="py-3 px-4 bg-gradient-to-r from-pink-100 via-red-100 to-pink-100 rounded-2xl mb-6 border border-pink-300">
+                <h3 class="font-mali text-xl sm:text-2xl font-bold text-love-deep animate-pulse">
+                    "เป็นแฟนกับเค้านะครับ? 🥺💖"
+                </h3>
+            </div>
+
+            <!-- Proposal Interactive Buttons -->
+            <div id="proposal-buttons-area" class="relative min-h-[100px] flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button id="accept-btn" onclick="acceptProposal()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-love-deep to-pink-500 text-white font-mali text-base font-bold rounded-full shadow-lg hover:shadow-pink-500/50 hover:scale-110 active:scale-95 transition-all duration-300 z-10">
+                    ตกลงเป็นแฟนกันนะ! 💖✨
+                </button>
+
+                <button id="decline-btn" onmouseover="dodgeButton()" onclick="dodgeButton()" class="w-full sm:w-auto px-6 py-3 bg-gray-200 text-gray-600 font-mali text-sm font-medium rounded-full shadow transition-all duration-200">
+                    ขอคิดดูก่อน 😜
+                </button>
+            </div>
+
+            <!-- Acceptance Celebration View (Hidden initially) -->
+            <div id="celebration-view" class="hidden">
+                <div class="text-6xl mb-3 animate-bounce">🎉👩‍❤️‍👨🎂</div>
+                <h3 class="font-mali text-2xl font-bold text-love-deep mb-2">
+                    เย้! ตกลงแล้วน้าาาา! ❤️✨
+                </h3>
+                <p class="font-mali text-sm text-gray-700 mb-6 leading-relaxed">
+                    ขอบคุณที่เปิดใจให้เค้านะครับ สัญญาว่าจะดูแลและรักเธอให้ดีที่สุดทุกๆ วันเลย! 💍🌸
+                </p>
+                <button onclick="closeProposalModal()" class="px-6 py-2.5 bg-love-deep text-white font-mali rounded-full shadow-md hover:bg-pink-600 transition-all text-sm font-semibold">
+                    ปิดหน้าต่างนี้แล้วไปสวีทกัน! 🥰
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal 3: Admin / Edit Days Mode -->
+    <div id="admin-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-card rounded-3xl max-w-2xl w-full p-6 relative bg-white/95 shadow-2xl border-2 border-pink-300 max-h-[90vh] flex flex-col">
+            
+            <div class="flex justify-between items-center pb-3 border-b border-pink-100 mb-4">
+                <h3 class="font-mali text-xl font-bold text-love-deep flex items-center gap-2">
+                    <i class="fas fa-edit"></i> ระบบจัดการภารกิจ 21 วัน
+                </h3>
+                <button onclick="toggleAdminModal()" class="w-8 h-8 rounded-full bg-pink-100 text-love-deep hover:bg-love-deep hover:text-white flex items-center justify-center transition-all">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Day Selector Tabs -->
+            <div class="mb-4">
+                <label class="block text-xs font-semibold text-gray-600 mb-1">เลือกวันที่ต้องการแก้ไข:</label>
+                <select id="admin-day-select" onchange="loadAdminDayData()" class="w-full p-2.5 rounded-xl border border-pink-200 bg-pink-50/50 text-sm font-mali focus:outline-none focus:ring-2 focus:ring-love-pink">
+                    <!-- Options 1-21 -->
+                </select>
+            </div>
+
+            <!-- Edit Form -->
+            <div class="space-y-4 overflow-y-auto pr-1 flex-1">
+                <!-- Lock Status Toggle -->
+                <div class="flex items-center justify-between p-3 bg-pink-50 rounded-xl border border-pink-200">
+                    <div>
+                        <span class="block text-sm font-bold text-gray-800 font-mali">สถานะการปลดล็อก</span>
+                        <span class="text-xs text-gray-500">ปลดล็อกเพื่อให้แฟนสามารถคลิกอ่านได้</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="admin-unlocked-toggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-love-deep"></div>
+                    </label>
+                </div>
+
+                <!-- Day Title Input -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">หัวข้อประจำวัน:</label>
+                    <input type="text" id="admin-title-input" class="w-full p-2.5 rounded-xl border border-pink-200 text-sm font-mali focus:outline-none focus:ring-2 focus:ring-love-pink" placeholder="เช่น วันแรกที่เราเจอกัน">
+                </div>
+
+                <!-- Emoji Picker -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">อิโมจิ / สติ๊กเกอร์ประจำวัน:</label>
+                    <input type="text" id="admin-emoji-input" class="w-full p-2.5 rounded-xl border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-love-pink" placeholder="เช่น 🌸, 💖, 🎁, 🧸">
+                </div>
+
+                <!-- Image URL Input -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">ลิงก์รูปภาพประกอบ (ใส่หรือไม่ใส่ก็ได้):</label>
+                    <input type="text" id="admin-image-input" class="w-full p-2.5 rounded-xl border border-pink-200 text-xs focus:outline-none focus:ring-2 focus:ring-love-pink" placeholder="https://example.com/cute-photo.jpg">
+                </div>
+
+                <!-- Message Content Area -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">ข้อความความในใจ:</label>
+                    <textarea id="admin-message-input" rows="4" class="w-full p-3 rounded-xl border border-pink-200 text-sm font-mali focus:outline-none focus:ring-2 focus:ring-love-pink" placeholder="เขียนความรู้สึกหวานๆ ถึงแฟนในวันนี้..."></textarea>
+                </div>
+            </div>
+
+            <!-- Admin Actions -->
+            <div class="pt-4 border-t border-pink-100 flex justify-between items-center mt-4 gap-2">
+                <button onclick="resetToDefaultData()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-mali rounded-xl transition-all">
+                    <i class="fas fa-undo mr-1"></i> รีเซ็ตเป็นค่าเริ่มต้น
+                </button>
+                
+                <button onclick="saveAdminDayData()" class="px-6 py-2 bg-love-deep hover:bg-pink-600 text-white text-sm font-mali font-bold rounded-xl shadow-md transition-all">
+                    <i class="fas fa-save mr-1"></i> บันทึกข้อมูลวันนี้
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Hidden Background Audio for Romantic Vibe -->
+    <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=sweet-love-111663.mp3"></audio>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Default 21-Day Templates Data
+        const DEFAULT_DAYS_DATA = [
+            { day: 1, title: "วันแรกของภารกิจ 🌸", emoji: "🌸", unlocked: true, image: "", message: "ยินดีต้อนรับสู่ภารกิจ 21 วันขอเป็นแฟนนะครับ!\nตั้งแต่วันนี้ไป เค้าจะมาบอกความในใจให้ฟังทุกวันเลยนะ ค่อยๆ เปิดอ่านวันละวันน้า~ ❤️" },
+            { day: 2, title: "รอยยิ้มของเธอ  JsonConvert😊", emoji: "😊", unlocked: true, image: "", message: "รู้ไหมว่ารอยยิ้มของเธอคือสิ่งที่ดีที่สุดในแต่ละวันของเค้าเลยนะ แค่เห็นเธอยิ้ม วันแย่ๆ ก็สดใสขึ้นมาทันทีเลย" },
+            { day: 3, title: "ความใส่ใจเล็กๆ ☕", emoji: "☕", unlocked: false, image: "", message: "ขอบคุณนะที่คอยถามว่ากินข้าวหรือยัง ขอบคุณความหวังดีเล็กๆ น้อยๆ ที่มีให้กันเสมอ มันอบอุ่นหัวใจมากๆ เลย" },
+            { day: 4, title: "ชอบเวลาเธอหัวเราะ 😆", emoji: "😆", unlocked: false, image: "", message: "เสียงหัวเราะของเธอเหมือนดนตรีเพราะๆ เลยนะ อยากเป็นคนที่ทำให้เธอยิ้มและหัวเราะได้แบบนี้ทุกวันเลย" },
+            { day: 5, title: "เธอคือกำลังใจ 🌟", emoji: "🌟", unlocked: false, image: "", message: "เหนื่อยจากงานหรือการเรียนเมื่อไหร่ แค่คิดถึงหน้าเธอ เค้าก็มีแรงฮึดสู้ต่อแล้ว เธอคือกำลังใจสำคัญของเค้านะ" },
+            { day: 6, title: "อาหารมื้ออร่อย 🍦", emoji: "🍦", unlocked: false, image: "", message: "กินอะไรก็อร่อยถ้าได้กินกับเธอ! ไว้วันไหนว่างๆ ไปหาของอร่อยกินกันอีกนะ เค้าจองตัวไว้ก่อนเลย~" },
+            { day: 7, title: "ครบ 1 สัปดาห์แล้ว! 🎉", emoji: "🎉", unlocked: false, image: "", message: "ผ่านไป 1 สัปดาห์แล้วไวมากๆ! ยิ่งรู้จักยิ่งรู้สึกว่าเธอเป็นคนที่น่ารักและมีเสน่ห์มากๆ เลยนะ" },
+            { day: 8, title: "สายตาคู่นั้น 👁️✨", emoji: "👁️✨", unlocked: false, image: "", message: "เวลาเธอสบตา เค้าแอบตื่นเต้นและทำตัวไม่ถูกตลอดเลยรู้มั้ย ไม่รู้จะเขินอะไรขนาดนั้นเหมือนกัน ฮ่าๆ" },
+            { day: 9, title: "ความสบายใจ 🏡", emoji: "🏡", unlocked: false, image: "", message: "การได้คุยกับเธอคือช่วงเวลาที่เค้าได้เป็นตัวเองมากที่สุด ขอบคุณที่เป็นพื้นที่ปลอดภัยและความสบายใจให้กันนะ" },
+            { day: 10, title: "ครึ่งทางแล้วนะ 🎈", emoji: "🎈", unlocked: false, image: "", message: "เดินทางมาถึงวันที่ 10 แล้ว! ความรู้สึกของเค้าชัดเจนขึ้นทุกๆ วันเลยว่าเค้าอยากมีเธออยู่ในชีวิตต่อไปเรื่อยๆ" },
+            { day: 11, title: "เพลงนี้คิดถึงเธอ 🎵", emoji: "🎵", unlocked: false, image: "", message: "ฟังเพลงรักเพลงไหน ตอนนี้หน้าเธอก็ลอยเข้ามาในหัวตลอดเลยนะ สงสัยจะตกหลุมรักเธอเข้าเต็มๆ แล้วล่ะ" },
+            { day: 12, title: "เจ้าคนเก่ง 👏", emoji: "👏", unlocked: false, image: "", message: "เธอเป็นคนที่เก่งและตั้งใจมากเลยนะ พยายามเข้าล่ะ! ไม่ว่าจะเจออะไร เค้าจะคอยซัพพอร์ตเธออยู่ตรงนี้เสมอ" },
+            { day: 13, title: "อยากกอดอุ่นๆ 🧸", emoji: "🧸", unlocked: false, image: "", message: "วันนี้อยากส่งกอดอุ่นๆ ไปให้เธอจัง ถ้าอยู่ใกล้ๆ จะขอเข้าไปกอดแน่นๆ สักทีนะ" },
+            { day: 14, title: "สองสัปดาห์สุดพิเศษ 💕", emoji: "💕", unlocked: false, image: "", message: "14 วันแล้วน้า... ความรู้สึกดีๆ ที่มีให้เธอไม่เคยลดลงเลย มีแต่จะเพิ่มขึ้นทุกวันๆ" },
+            { day: 15, title: "ฝันดีทุกคืน 🌙", emoji: "🌙", unlocked: false, image: "", message: "ชอบเวลาที่เราได้บอกฝันดีกันก่อนนอน มันทำให้เค้านอนหลับฝันดีทุกคืนเลยนะ" },
+            { day: 16, title: "อนาคตที่มีเธอ 🌈", emoji: "🌈", unlocked: false, image: "", message: "พอคิดถึงวันข้างหน้า เค้าก็เห็นภาพตัวเองเดินข้างๆ เธอไปเรื่อยๆ อยากสร้างความทรงจำดีๆ ด้วยกันอีกเยอะๆ เลย" },
+            { day: 17, title: "ขอบคุณโลกใบนี้ 🌍", emoji: "🌍", unlocked: false, image: "", message: "ขอบคุณโลกใบนี้จริงๆ ที่เหวี่ยงเธอเข้ามาให้รู้จักกัน เธอคือของขวัญที่ดีที่สุดเลยนะ" },
+            { day: 18, title: "ใกล้ความจริงแล้ว ✨", emoji: "✨", unlocked: false, image: "", message: "อีกแค่นับถอยหลังไม่กี่วันก็จะถึงวันที่ 21 แล้ว... ตื่นเต้นจัง อยากให้ถึงวันนั้นไวๆ แล้วสิ" },
+            { day: 19, title: "เค้ามั่นใจในตัวเธอ ❤️", emoji: "❤️", unlocked: false, image: "", message: "ตลอดเวลาที่ผ่านมา เค้ามั่นใจในตัวเองมากๆ ว่าเธอคือคนที่เค้าอยากดูแลไปนานๆ" },
+            { day: 20, title: "พรุ่งนี้วันสำคัญ! ⏳", emoji: "⏳", unlocked: false, image: "", message: "พรุ่งนี้แล้วนะ! คืนนี้นอนหลับพักผ่อนเยอะๆ พรุ่งนี้เตรียมรับความประทับใจสุดพิเศษในวันที่ 21 ได้เลย!" },
+            { day: 21, title: "คำถามจากหัวใจ 💍💖", emoji: "👑", unlocked: false, image: "", message: "เดินทางมาถึงวันที่ 21 แล้ว... ขอบคุณที่อ่านมาจนถึงวันนี้นะครับ\nเค้ามีคำถามสำคัญมากอยากจะถามเธอ..." }
+        ];
+
+        // Global App State
+        let daysData = [];
+
+        // Initialize Application
+        window.onload = function() {
+            loadDaysData();
+            renderBackgroundHearts();
+            renderDaysGrid();
+            populateAdminDaySelect();
+            updateProgress();
+        };
+
+        // Load data from LocalStorage or Fallback to Defaults
+        function loadDaysData() {
+            const stored = localStorage.getItem('proposal_21_days_data');
+            if (stored) {
+                try {
+                    daysData = JSON.parse(stored);
+                } catch(e) {
+                    daysData = [...DEFAULT_DAYS_DATA];
+                }
+            } else {
+                daysData = [...DEFAULT_DAYS_DATA];
+                saveDaysData();
+            }
+        }
+
+        // Save data to LocalStorage
+        function saveDaysData() {
+            localStorage.setItem('proposal_21_days_data', JSON.stringify(daysData));
+        }
+
+        // Render Background Floating Hearts
+        function renderBackgroundHearts() {
+            const container = document.getElementById('hearts-bg');
+            const heartIcons = ['❤️', '💖', '🌸', '✨', '💕', '💗'];
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 20; i++) {
+                const li = document.createElement('li');
+                li.className = 'heart-particle';
+                li.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+                li.style.left = `${Math.random() * 100}%`;
+                li.style.animationDelay = `${Math.random() * 10}s`;
+                li.style.animationDuration = `${12 + Math.random() * 10}s`;
+                li.style.fontSize = `${16 + Math.random() * 20}px`;
+                container.appendChild(li);
+            }
+        }
+
+        // Render Days Grid
+        function renderDaysGrid() {
+            const grid = document.getElementById('days-grid');
+            grid.innerHTML = '';
+
+            daysData.forEach((dayItem) => {
+                const isDay21 = dayItem.day === 21;
+                const card = document.createElement('div');
+
+                // Dynamic Styling for Cards
+                let cardClasses = "relative rounded-2xl p-4 flex flex-col items-center justify-between cursor-pointer transition-all duration-300 transform hover:-translate-y-1.5 shadow-md ";
+                
+                if (dayItem.unlocked) {
+                    if (isDay21) {
+                        cardClasses += "bg-gradient-to-br from-pink-100 via-red-50 to-amber-100 card-glow-day21 border-2 border-love-deep animate-pulse-slow";
+                    } else {
+                        cardClasses += "glass-card hover:shadow-pink-200/80 hover:border-pink-400 bg-white/90";
+                    }
+                } else {
+                    cardClasses += "bg-gray-100/80 border border-gray-200 opacity-75 hover:opacity-90";
+                }
+
+                card.className = cardClasses;
+                card.onclick = () => handleCardClick(dayItem.day);
+
+                // Inner HTML Construction
+                card.innerHTML = `
+                    <div class="w-full flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${dayItem.unlocked ? 'bg-pink-100 text-love-deep' : 'bg-gray-200 text-gray-500'} font-mali">
+                            DAY ${dayItem.day < 10 ? '0' + dayItem.day : dayItem.day}
+                        </span>
+                        ${dayItem.unlocked 
+                            ? '<i class="fas fa-heart text-love-deep text-xs"></i>' 
+                            : '<i class="fas fa-lock text-gray-400 text-xs"></i>'}
+                    </div>
+
+                    <div class="my-3 text-center">
+                        <span class="text-3xl sm:text-4xl inline-block ${dayItem.unlocked ? 'animate-float' : 'filter grayscale opacity-60'}">
+                            ${dayItem.unlocked ? dayItem.emoji : '🎁'}
+                        </span>
+                    </div>
+
+                    <div class="text-center w-full">
+                        <h4 class="font-mali text-xs sm:text-sm font-semibold text-gray-800 truncate w-full">
+                            ${dayItem.unlocked ? dayItem.title : 'ยังไม่เปิดปลดล็อก'}
+                        </h4>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Update Progress Bar Counter
+        function updateProgress() {
+            const unlockedCount = daysData.filter(d => d.unlocked).length;
+            const percentage = Math.round((unlockedCount / 21) * 100);
+            
+            document.getElementById('progress-text').innerText = `${unlockedCount} / 21 วัน`;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+        }
+
+        // Handle Clicking Day Cards
+        function handleCardClick(dayNum) {
+            const dayItem = daysData.find(d => d.day === dayNum);
+            
+            if (!dayItem.unlocked) {
+                showToast("วันนี้นังไม่เปิดให้อ่านน้า~ รอเจ้าของภารกิจปลดล็อกให้นะครับ 🔒✨");
+                return;
+            }
+
+            if (dayNum === 21) {
+                openProposalModal(dayItem);
+            } else {
+                openDayModal(dayItem);
+            }
+        }
+
+        // Open Standard Day Modal
+        function openDayModal(dayItem) {
+            document.getElementById('modal-day-badge').innerText = `DAY ${dayItem.day < 10 ? '0' + dayItem.day : dayItem.day}`;
+            document.getElementById('modal-emoji').innerText = dayItem.emoji || '🌸';
+            document.getElementById('modal-title').innerText = dayItem.title;
+            document.getElementById('modal-message').innerText = dayItem.message;
+
+            const imgContainer = document.getElementById('modal-image-container');
+            const imgEl = document.getElementById('modal-image');
+            
+            if (dayItem.image && dayItem.image.trim() !== "") {
+                imgEl.src = dayItem.image;
+                imgContainer.classList.remove('hidden');
+            } else {
+                imgContainer.classList.add('hidden');
+            }
+
+            const modal = document.getElementById('day-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+                modal.firstElementChild.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeDayModal() {
+            const modal = document.getElementById('day-modal');
+            modal.classList.add('opacity-0');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Open Day 21 Grand Proposal Modal
+        function openProposalModal(dayItem) {
+            document.getElementById('proposal-message-text').innerText = dayItem.message;
+            document.getElementById('proposal-buttons-area').classList.remove('hidden');
+            document.getElementById('celebration-view').classList.add('hidden');
+
+            const modal = document.getElementById('proposal-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-90');
+                modal.firstElementChild.classList.add('scale-100');
+            }, 10);
+
+            // Trigger gentle celebratory fireworks confetti on open
+            triggerHeartsConfetti();
+        }
+
+        function closeProposalModal() {
+            const modal = document.getElementById('proposal-modal');
+            modal.classList.add('opacity-0');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-90');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 500);
+        }
+
+        // Interactive "Decline" Button Dodge Behavior
+        function dodgeButton() {
+            const btn = document.getElementById('decline-btn');
+            const x = (Math.random() - 0.5) * 200;
+            const y = (Math.random() - 0.5) * 120;
+            
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+            
+            const cutePrompts = [
+                "ขอคิดดูก่อน 😜",
+                "อย่ากดอันนี้นิ 🥺",
+                "กดตกลงเถอะน้า~ 💕",
+                "เค้าเสียใจนะ! 😭",
+                "กดอีกฝั่งสิครับ 🥰"
+            ];
+            btn.innerText = cutePrompts[Math.floor(Math.random() * cutePrompts.length)];
+        }
+
+        // Accept Proposal Trigger
+        function acceptProposal() {
+            document.getElementById('proposal-buttons-area').classList.add('hidden');
+            document.getElementById('celebration-view').classList.remove('hidden');
+
+            // Mega Confetti Explosion
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    colors: ['#ff4d6d', '#ff8fa3', '#ffd1dc', '#ffb3c6', '#ffffff']
+                }));
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    colors: ['#ff4d6d', '#ff8fa3', '#ffd1dc', '#ffb3c6', '#ffffff']
+                }));
+            }, 250);
+        }
+
+        // Heart Confetti Helper
+        function triggerHeartsConfetti() {
+            confetti({
+                particleCount: 40,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#ff8fa3', '#ffffff']
+            });
+        }
+
+        // Music Toggle Logic
+        let isPlaying = false;
+        function toggleMusic() {
+            const music = document.getElementById('bg-music');
+            const icon = document.getElementById('music-icon');
+            
+            if (isPlaying) {
+                music.pause();
+                icon.className = "fas fa-music";
+            } else {
+                music.play().catch(() => {
+                    showToast("กรุณาแตะหน้าจอก่อนเปิดเพลงน้า~");
+                });
+                icon.className = "fas fa-pause text-pink-600 animate-spin-slow";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Admin Management Modal Controls
+        function toggleAdminModal() {
+            const modal = document.getElementById('admin-modal');
+            if (modal.classList.contains('hidden')) {
+                // Password check prompt (Simple prompt for ease of use)
+                const pass = prompt("กรุณากรอกรหัสผ่านเข้าสู่ระบบแอดมิน (Default: 1234):", "1234");
+                if (pass === "1234") {
+                    loadAdminDayData();
+                    modal.classList.remove('hidden');
+                    setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                } else if (pass !== null) {
+                    alert("รหัสผ่านไม่ถูกต้องน้า~");
+                }
+            } else {
+                modal.classList.add('opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        function populateAdminDaySelect() {
+            const select = document.getElementById('admin-day-select');
+            select.innerHTML = '';
+            for (let i = 1; i <= 21; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `วันที่ ${i} ${daysData[i-1]?.unlocked ? '🔓 (ปลดล็อกแล้ว)' : '🔒 (ยังล็อกอยู่)'}`;
+                select.appendChild(opt);
+            }
+        }
+
+        function loadAdminDayData() {
+            const dayNum = parseInt(document.getElementById('admin-day-select').value) || 1;
+            const dayItem = daysData.find(d => d.day === dayNum);
+
+            if (dayItem) {
+                document.getElementById('admin-unlocked-toggle').checked = dayItem.unlocked;
+                document.getElementById('admin-title-input').value = dayItem.title || '';
+                document.getElementById('admin-emoji-input').value = dayItem.emoji || '🌸';
+                document.getElementById('admin-image-input').value = dayItem.image || '';
+                document.getElementById('admin-message-input').value = dayItem.message || '';
+            }
+        }
+
+        function saveAdminDayData() {
+            const dayNum = parseInt(document.getElementById('admin-day-select').value) || 1;
+            const dayIndex = daysData.findIndex(d => d.day === dayNum);
+
+            if (dayIndex !== -1) {
+                daysData[dayIndex].unlocked = document.getElementById('admin-unlocked-toggle').checked;
+                daysData[dayIndex].title = document.getElementById('admin-title-input').value.trim();
+                daysData[dayIndex].emoji = document.getElementById('admin-emoji-input').value.trim();
+                daysData[dayIndex].image = document.getElementById('admin-image-input').value.trim();
+                daysData[dayIndex].message = document.getElementById('admin-message-input').value.trim();
+
+                saveDaysData();
+                renderDaysGrid();
+                updateProgress();
+                populateAdminDaySelect();
+                document.getElementById('admin-day-select').value = dayNum;
+
+                showToast(`บันทึกข้อมูลวันที่ ${dayNum} เรียบร้อยแล้ว! ✨`);
+            }
+        }
+
+        function resetToDefaultData() {
+            if (confirm("คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตข้อความทั้งหมดกลับเป็นค่าเริ่มต้น?")) {
+                daysData = JSON.parse(JSON.stringify(DEFAULT_DAYS_DATA));
+                saveDaysData();
+                renderDaysGrid();
+                updateProgress();
+                populateAdminDaySelect();
+                loadAdminDayData();
+                showToast("รีเซ็ตข้อมูลเป็นค่าเริ่มต้นเรียบร้อยแล้ว ❤️");
+            }
+        }
+
+        // Custom Toast Notification Function
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 left-1/2 transform -translate-x-1/2 z-50 bg-gray-800/90 text-white font-mali text-xs sm:text-sm px-5 py-2.5 rounded-full shadow-lg border border-pink-300 transition-all duration-300 opacity-0 pointer-events-none";
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.classList.remove('opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
